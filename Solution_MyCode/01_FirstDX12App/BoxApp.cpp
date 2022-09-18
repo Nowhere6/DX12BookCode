@@ -40,7 +40,7 @@ private:
   virtual void OnResize()override;
   virtual void Update(const GameTimer& gt)override;
   virtual void Draw(const GameTimer& gt)override;
-          
+
   virtual void OnMouseDown(WPARAM btnState, int x, int y)override;
   virtual void OnMouseUp(WPARAM btnState, int x, int y)override;
   virtual void OnMouseMove(WPARAM btnState, int x, int y)override;
@@ -72,7 +72,7 @@ private:
   XMFLOAT4X4 mView = MathHelper::Identity4x4();
   XMFLOAT4X4 mProj = MathHelper::Identity4x4();
 
-  float mTheta = 1.5f*XM_PI;
+  float mTheta = 1.5f * XM_PI;
   float mPhi = XM_PIDIV4;
   float mRadius = 5.0f;
 
@@ -142,15 +142,15 @@ void BoxApp::OnResize()
   D3DApp::OnResize();
 
   // The window resized, so update the aspect ratio and recompute the projection matrix.
-  XMMATRIX P = XMMatrixPerspectiveFovLH(0.25f*MathHelper::Pi, AspectRatio(), 1.0f, 1000.0f);
+  XMMATRIX P = XMMatrixPerspectiveFovLH(0.25f * MathHelper::Pi, AspectRatio(), 1.0f, 1000.0f);
   XMStoreFloat4x4(&mProj, P);
 }
 
 void BoxApp::Update(const GameTimer& gt)
 {
   // Convert Spherical to Cartesian coordinates.
-  float x = mRadius * sinf(mPhi)*cosf(mTheta);
-  float z = mRadius * sinf(mPhi)*sinf(mTheta);
+  float x = mRadius * sinf(mPhi) * cosf(mTheta);
+  float z = mRadius * sinf(mPhi) * sinf(mTheta);
   float y = mRadius * cosf(mPhi);
 
   // Build the view matrix.
@@ -163,7 +163,7 @@ void BoxApp::Update(const GameTimer& gt)
 
   XMMATRIX world = XMLoadFloat4x4(&mWorld);
   XMMATRIX proj = XMLoadFloat4x4(&mProj);
-  XMMATRIX worldViewProj = world * view*proj;
+  XMMATRIX worldViewProj = world * view * proj;
 
   // Update the constant buffer with the latest worldViewProj matrix.
   ObjectConstants objConstants;
@@ -249,8 +249,8 @@ void BoxApp::OnMouseMove(WPARAM btnState, int x, int y)
   if ((btnState & MK_LBUTTON) != 0)
   {
     // Make each pixel correspond to a quarter of a degree.
-    float dx = XMConvertToRadians(0.25f*static_cast<float>(x - mLastMousePos.x));
-    float dy = XMConvertToRadians(0.25f*static_cast<float>(y - mLastMousePos.y));
+    float dx = XMConvertToRadians(0.25f * static_cast<float>(x - mLastMousePos.x));
+    float dy = XMConvertToRadians(0.25f * static_cast<float>(y - mLastMousePos.y));
 
     // Update angles based on input to orbit camera around box.
     mTheta -= dx;
@@ -262,8 +262,8 @@ void BoxApp::OnMouseMove(WPARAM btnState, int x, int y)
   else if ((btnState & MK_RBUTTON) != 0)
   {
     // Make each pixel correspond to 0.005 unit in the scene.
-    float dx = 0.005f*static_cast<float>(x - mLastMousePos.x);
-    float dy = 0.005f*static_cast<float>(y - mLastMousePos.y);
+    float dx = 0.005f * static_cast<float>(x - mLastMousePos.x);
+    float dy = 0.005f * static_cast<float>(y - mLastMousePos.y);
 
     // Update the camera radius based on input.
     mRadius += dx - dy;
@@ -302,6 +302,7 @@ void BoxApp::BuildConstantBuffers()
   cbvDesc.BufferLocation = cbAddress;
   cbvDesc.SizeInBytes = d3dUtil::CalcConstantBufferByteSize(sizeof(ObjectConstants));
 
+  // create CBV, save descriptor in specific heap.
   md3dDevice->CreateConstantBufferView(
     &cbvDesc,
     mCbvHeap->GetCPUDescriptorHandleForHeapStart());
