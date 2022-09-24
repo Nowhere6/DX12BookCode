@@ -167,7 +167,18 @@ void D3DApp::OnResize()
   for (UINT i = 0; i < SwapChainBufferCount; i++)
   {
     ThrowIfFailed(mSwapChain->GetBuffer(i, IID_PPV_ARGS(&mSwapChainBuffer[i])));
-    md3dDevice->CreateRenderTargetView(mSwapChainBuffer[i].Get(), nullptr, rtvHeapHandle);
+   
+    if (USE_R8G8B8A8_UNORM_RGB && mBackBufferFormat == DXGI_FORMAT_R8G8B8A8_UNORM)
+    {
+      // Use srgb rtv.
+      D3D12_RENDER_TARGET_VIEW_DESC RTV_Desc{ DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, D3D12_RTV_DIMENSION_TEXTURE2D };
+      RTV_Desc.Texture2D = D3D12_TEX2D_RTV{0, 0};
+      md3dDevice->CreateRenderTargetView(mSwapChainBuffer[i].Get(), &RTV_Desc, rtvHeapHandle);
+    }
+    else
+    {
+      md3dDevice->CreateRenderTargetView(mSwapChainBuffer[i].Get(), nullptr, rtvHeapHandle);
+    }
     rtvHeapHandle.Offset(1, mRtvDescriptorSize);
   }
 

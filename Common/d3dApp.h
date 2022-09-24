@@ -9,6 +9,9 @@
 #include <crtdbg.h>
 #endif
 
+// Use srgb rtv?
+#define USE_R8G8B8A8_UNORM_RGB true
+
 #include "d3dUtil.h"
 #include "GameTimer.h"
 
