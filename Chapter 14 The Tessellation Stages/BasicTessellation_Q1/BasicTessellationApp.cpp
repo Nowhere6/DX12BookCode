@@ -1,5 +1,5 @@
 //***************************************************************************************
-// BezierPatchApp.cpp by Frank Luna (C) 2015 All Rights Reserved.
+// BasicTessellationApp.cpp by Frank Luna (C) 2015 All Rights Reserved.
 //***************************************************************************************
 
 #include "../../Common/d3dApp.h"
@@ -57,13 +57,13 @@ enum class RenderLayer : int
 	Count
 };
 
-class BezierPatchApp : public D3DApp
+class BasicTessellationApp : public D3DApp
 {
 public:
-    BezierPatchApp(HINSTANCE hInstance);
-    BezierPatchApp(const BezierPatchApp& rhs) = delete;
-    BezierPatchApp& operator=(const BezierPatchApp& rhs) = delete;
-    ~BezierPatchApp();
+    BasicTessellationApp(HINSTANCE hInstance);
+    BasicTessellationApp(const BasicTessellationApp& rhs) = delete;
+    BasicTessellationApp& operator=(const BasicTessellationApp& rhs) = delete;
+    ~BasicTessellationApp();
 
     virtual bool Initialize()override;
 
@@ -82,7 +82,7 @@ private:
 	void UpdateObjectCBs(const GameTimer& gt);
 	void UpdateMaterialCBs(const GameTimer& gt);
 	void UpdateMainPassCB(const GameTimer& gt);
-
+ 
 	void LoadTextures();
     void BuildRootSignature();
 	void BuildDescriptorHeaps();
@@ -153,7 +153,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
 
     try
     {
-        BezierPatchApp theApp(hInstance);
+        BasicTessellationApp theApp(hInstance);
         if(!theApp.Initialize())
             return 0;
 
@@ -166,18 +166,18 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
     }
 }
 
-BezierPatchApp::BezierPatchApp(HINSTANCE hInstance)
+BasicTessellationApp::BasicTessellationApp(HINSTANCE hInstance)
     : D3DApp(hInstance)
 {
 }
 
-BezierPatchApp::~BezierPatchApp()
+BasicTessellationApp::~BasicTessellationApp()
 {
     if(md3dDevice != nullptr)
         FlushCommandQueue();
 }
 
-bool BezierPatchApp::Initialize()
+bool BasicTessellationApp::Initialize()
 {
     if(!D3DApp::Initialize())
         return false;
@@ -210,7 +210,7 @@ bool BezierPatchApp::Initialize()
     return true;
 }
  
-void BezierPatchApp::OnResize()
+void BasicTessellationApp::OnResize()
 {
     D3DApp::OnResize();
 
@@ -219,7 +219,7 @@ void BezierPatchApp::OnResize()
     XMStoreFloat4x4(&mProj, P);
 }
 
-void BezierPatchApp::Update(const GameTimer& gt)
+void BasicTessellationApp::Update(const GameTimer& gt)
 {
     OnKeyboardInput(gt);
 	UpdateCamera(gt);
@@ -244,7 +244,7 @@ void BezierPatchApp::Update(const GameTimer& gt)
 	UpdateMainPassCB(gt);
 }
 
-void BezierPatchApp::Draw(const GameTimer& gt)
+void BasicTessellationApp::Draw(const GameTimer& gt)
 {
     auto cmdListAlloc = mCurrFrameResource->CmdListAlloc;
 
@@ -306,7 +306,7 @@ void BezierPatchApp::Draw(const GameTimer& gt)
     mCommandQueue->Signal(mFence.Get(), mCurrentFence);
 }
 
-void BezierPatchApp::OnMouseDown(WPARAM btnState, int x, int y)
+void BasicTessellationApp::OnMouseDown(WPARAM btnState, int x, int y)
 {
     mLastMousePos.x = x;
     mLastMousePos.y = y;
@@ -314,12 +314,12 @@ void BezierPatchApp::OnMouseDown(WPARAM btnState, int x, int y)
     SetCapture(mhMainWnd);
 }
 
-void BezierPatchApp::OnMouseUp(WPARAM btnState, int x, int y)
+void BasicTessellationApp::OnMouseUp(WPARAM btnState, int x, int y)
 {
     ReleaseCapture();
 }
 
-void BezierPatchApp::OnMouseMove(WPARAM btnState, int x, int y)
+void BasicTessellationApp::OnMouseMove(WPARAM btnState, int x, int y)
 {
     if((btnState & MK_LBUTTON) != 0)
     {
@@ -351,11 +351,11 @@ void BezierPatchApp::OnMouseMove(WPARAM btnState, int x, int y)
     mLastMousePos.y = y;
 }
  
-void BezierPatchApp::OnKeyboardInput(const GameTimer& gt)
+void BasicTessellationApp::OnKeyboardInput(const GameTimer& gt)
 {
 }
  
-void BezierPatchApp::UpdateCamera(const GameTimer& gt)
+void BasicTessellationApp::UpdateCamera(const GameTimer& gt)
 {
 	// Convert Spherical to Cartesian coordinates.
 	mEyePos.x = mRadius*sinf(mPhi)*cosf(mTheta);
@@ -371,12 +371,12 @@ void BezierPatchApp::UpdateCamera(const GameTimer& gt)
 	XMStoreFloat4x4(&mView, view);
 }
 
-void BezierPatchApp::AnimateMaterials(const GameTimer& gt)
+void BasicTessellationApp::AnimateMaterials(const GameTimer& gt)
 {
 
 }
 
-void BezierPatchApp::UpdateObjectCBs(const GameTimer& gt)
+void BasicTessellationApp::UpdateObjectCBs(const GameTimer& gt)
 {
 	auto currObjectCB = mCurrFrameResource->ObjectCB.get();
 	for(auto& e : mAllRitems)
@@ -400,7 +400,7 @@ void BezierPatchApp::UpdateObjectCBs(const GameTimer& gt)
 	}
 }
 
-void BezierPatchApp::UpdateMaterialCBs(const GameTimer& gt)
+void BasicTessellationApp::UpdateMaterialCBs(const GameTimer& gt)
 {
 	auto currMaterialCB = mCurrFrameResource->MaterialCB.get();
 	for(auto& e : mMaterials)
@@ -426,7 +426,7 @@ void BezierPatchApp::UpdateMaterialCBs(const GameTimer& gt)
 	}
 }
 
-void BezierPatchApp::UpdateMainPassCB(const GameTimer& gt)
+void BasicTessellationApp::UpdateMainPassCB(const GameTimer& gt)
 {
 	XMMATRIX view = XMLoadFloat4x4(&mView);
 	XMMATRIX proj = XMLoadFloat4x4(&mProj);
@@ -462,7 +462,7 @@ void BezierPatchApp::UpdateMainPassCB(const GameTimer& gt)
 	currPassCB->CopyData(0, mMainPassCB);
 }
 
-void BezierPatchApp::LoadTextures()
+void BasicTessellationApp::LoadTextures()
 {
 	auto bricksTex = std::make_unique<Texture>();
 	bricksTex->Name = "bricksTex";
@@ -498,7 +498,7 @@ void BezierPatchApp::LoadTextures()
 	mTextures[white1x1Tex->Name] = std::move(white1x1Tex);
 }
 
-void BezierPatchApp::BuildRootSignature()
+void BasicTessellationApp::BuildRootSignature()
 {
 	CD3DX12_DESCRIPTOR_RANGE texTable;
 	texTable.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0);
@@ -538,7 +538,7 @@ void BezierPatchApp::BuildRootSignature()
         IID_PPV_ARGS(mRootSignature.GetAddressOf())));
 }
 
-void BezierPatchApp::BuildDescriptorHeaps()
+void BasicTessellationApp::BuildDescriptorHeaps()
 {
 	//
 	// Create the SRV heap.
@@ -586,12 +586,12 @@ void BezierPatchApp::BuildDescriptorHeaps()
 	md3dDevice->CreateShaderResourceView(white1x1Tex.Get(), &srvDesc, hDescriptor);
 }
 
-void BezierPatchApp::BuildShadersAndInputLayout()
+void BasicTessellationApp::BuildShadersAndInputLayout()
 {
-	mShaders["tessVS"] = d3dUtil::CompileShader(L"Shaders\\BezierTessellation.hlsl", nullptr, "VS", "vs_5_0");
-	mShaders["tessHS"] = d3dUtil::CompileShader(L"Shaders\\BezierTessellation.hlsl", nullptr, "HS", "hs_5_0");
-	mShaders["tessDS"] = d3dUtil::CompileShader(L"Shaders\\BezierTessellation.hlsl", nullptr, "DS", "ds_5_0");
-	mShaders["tessPS"] = d3dUtil::CompileShader(L"Shaders\\BezierTessellation.hlsl", nullptr, "PS", "ps_5_0");
+	mShaders["tessVS"] = d3dUtil::CompileShader(L"Shaders\\Tessellation.hlsl", nullptr, "VS", "vs_5_0");
+	mShaders["tessHS"] = d3dUtil::CompileShader(L"Shaders\\Tessellation.hlsl", nullptr, "HS", "hs_5_0");
+	mShaders["tessDS"] = d3dUtil::CompileShader(L"Shaders\\Tessellation.hlsl", nullptr, "DS", "ds_5_0");
+	mShaders["tessPS"] = d3dUtil::CompileShader(L"Shaders\\Tessellation.hlsl", nullptr, "PS", "ps_5_0");
 	
     mInputLayout =
     {
@@ -599,42 +599,17 @@ void BezierPatchApp::BuildShadersAndInputLayout()
     };
 }
 
-void BezierPatchApp::BuildQuadPatchGeometry()
+void BasicTessellationApp::BuildQuadPatchGeometry()
 {
-    std::array<XMFLOAT3,16> vertices =
+    std::array<XMFLOAT3,4> vertices =
 	{
-		// Row 0
-		XMFLOAT3(-10.0f, -10.0f, +15.0f),
-		XMFLOAT3(-5.0f,  0.0f, +15.0f),
-		XMFLOAT3(+5.0f,  0.0f, +15.0f),
-		XMFLOAT3(+10.0f, 0.0f, +15.0f),
-
-		// Row 1
-		XMFLOAT3(-15.0f, 0.0f, +5.0f),
-		XMFLOAT3(-5.0f,  0.0f, +5.0f),
-		XMFLOAT3(+5.0f,  20.0f, +5.0f),
-		XMFLOAT3(+15.0f, 0.0f, +5.0f),
-
-		// Row 2
-		XMFLOAT3(-15.0f, 0.0f, -5.0f),
-		XMFLOAT3(-5.0f,  0.0f, -5.0f),
-		XMFLOAT3(+5.0f,  0.0f, -5.0f),
-		XMFLOAT3(+15.0f, 0.0f, -5.0f),
-
-		// Row 3
-		XMFLOAT3(-10.0f, 10.0f, -15.0f),
-		XMFLOAT3(-5.0f,  0.0f, -15.0f),
-		XMFLOAT3(+5.0f,  0.0f, -15.0f),
-		XMFLOAT3(+25.0f, 10.0f, -15.0f)
+		XMFLOAT3(-10.0f, 0.0f, +10.0f),
+		XMFLOAT3(+10.0f, 0.0f, +10.0f),
+		XMFLOAT3(-10.0f, 0.0f, -10.0f),
+		XMFLOAT3(+10.0f, 0.0f, -10.0f)
 	};
 
-	std::array<std::int16_t, 16> indices = 
-	{ 
-		0, 1, 2, 3,
-		4, 5, 6, 7,
-		8, 9, 10, 11, 
-		12, 13, 14, 15
-	};
+	std::array<std::int16_t, 6> indices = {0, 1, 2, 2, 1, 3};
 
     const UINT vbByteSize = (UINT)vertices.size() * sizeof(Vertex);
     const UINT ibByteSize = (UINT)indices.size() * sizeof(std::uint16_t);
@@ -642,11 +617,11 @@ void BezierPatchApp::BuildQuadPatchGeometry()
 	auto geo = std::make_unique<MeshGeometry>();
 	geo->Name = "quadpatchGeo";
 
-	//ThrowIfFailed(D3DCreateBlob(vbByteSize, &geo->VertexBufferCPU));
-	//CopyMemory(geo->VertexBufferCPU->GetBufferPointer(), vertices.data(), vbByteSize);
+	ThrowIfFailed(D3DCreateBlob(vbByteSize, &geo->VertexBufferCPU));
+	CopyMemory(geo->VertexBufferCPU->GetBufferPointer(), vertices.data(), vbByteSize);
 
-	//ThrowIfFailed(D3DCreateBlob(ibByteSize, &geo->IndexBufferCPU));
-	//CopyMemory(geo->IndexBufferCPU->GetBufferPointer(), indices.data(), ibByteSize);
+	ThrowIfFailed(D3DCreateBlob(ibByteSize, &geo->IndexBufferCPU));
+	CopyMemory(geo->IndexBufferCPU->GetBufferPointer(), indices.data(), ibByteSize);
 
 	geo->VertexBufferGPU = d3dUtil::CreateDefaultBuffer(md3dDevice.Get(),
 		mCommandList.Get(), vertices.data(), vbByteSize, geo->VertexBufferUploader);
@@ -660,7 +635,7 @@ void BezierPatchApp::BuildQuadPatchGeometry()
 	geo->IndexBufferByteSize = ibByteSize;
 
 	SubmeshGeometry quadSubmesh;
-	quadSubmesh.IndexCount = (UINT)indices.size();
+	quadSubmesh.IndexCount = indices.size();
 	quadSubmesh.StartIndexLocation = 0;
 	quadSubmesh.BaseVertexLocation = 0;
 
@@ -669,7 +644,7 @@ void BezierPatchApp::BuildQuadPatchGeometry()
 	mGeometries[geo->Name] = std::move(geo);
 }
 
-void BezierPatchApp::BuildPSOs()
+void BasicTessellationApp::BuildPSOs()
 {
     D3D12_GRAPHICS_PIPELINE_STATE_DESC opaquePsoDesc;
 
@@ -713,7 +688,7 @@ void BezierPatchApp::BuildPSOs()
     ThrowIfFailed(md3dDevice->CreateGraphicsPipelineState(&opaquePsoDesc, IID_PPV_ARGS(&mPSOs["opaque"])));
 }
 
-void BezierPatchApp::BuildFrameResources()
+void BasicTessellationApp::BuildFrameResources()
 {
     for(int i = 0; i < gNumFrameResources; ++i)
     {
@@ -722,7 +697,7 @@ void BezierPatchApp::BuildFrameResources()
     }
 }
 
-void BezierPatchApp::BuildMaterials()
+void BasicTessellationApp::BuildMaterials()
 {
 	auto whiteMat = std::make_unique<Material>();
 	whiteMat->Name = "quadMat";
@@ -735,7 +710,7 @@ void BezierPatchApp::BuildMaterials()
 	mMaterials["whiteMat"] = std::move(whiteMat);
 }
 
-void BezierPatchApp::BuildRenderItems()
+void BasicTessellationApp::BuildRenderItems()
 {
 	auto quadPatchRitem = std::make_unique<RenderItem>();
 	quadPatchRitem->World = MathHelper::Identity4x4();
@@ -743,7 +718,7 @@ void BezierPatchApp::BuildRenderItems()
 	quadPatchRitem->ObjCBIndex = 0;
 	quadPatchRitem->Mat = mMaterials["whiteMat"].get();
 	quadPatchRitem->Geo = mGeometries["quadpatchGeo"].get();
-	quadPatchRitem->PrimitiveType = D3D_PRIMITIVE_TOPOLOGY_16_CONTROL_POINT_PATCHLIST;
+	quadPatchRitem->PrimitiveType = D3D_PRIMITIVE_TOPOLOGY_3_CONTROL_POINT_PATCHLIST;
 	quadPatchRitem->IndexCount = quadPatchRitem->Geo->DrawArgs["quadpatch"].IndexCount;
 	quadPatchRitem->StartIndexLocation = quadPatchRitem->Geo->DrawArgs["quadpatch"].StartIndexLocation;
 	quadPatchRitem->BaseVertexLocation = quadPatchRitem->Geo->DrawArgs["quadpatch"].BaseVertexLocation;
@@ -752,7 +727,7 @@ void BezierPatchApp::BuildRenderItems()
 	mAllRitems.push_back(std::move(quadPatchRitem));
 }
 
-void BezierPatchApp::DrawRenderItems(ID3D12GraphicsCommandList* cmdList, const std::vector<RenderItem*>& ritems)
+void BasicTessellationApp::DrawRenderItems(ID3D12GraphicsCommandList* cmdList, const std::vector<RenderItem*>& ritems)
 {
     UINT objCBByteSize = d3dUtil::CalcConstantBufferByteSize(sizeof(ObjectConstants));
     UINT matCBByteSize = d3dUtil::CalcConstantBufferByteSize(sizeof(MaterialConstants));
@@ -783,7 +758,7 @@ void BezierPatchApp::DrawRenderItems(ID3D12GraphicsCommandList* cmdList, const s
     }
 }
 
-std::array<const CD3DX12_STATIC_SAMPLER_DESC, 6> BezierPatchApp::GetStaticSamplers()
+std::array<const CD3DX12_STATIC_SAMPLER_DESC, 6> BasicTessellationApp::GetStaticSamplers()
 {
 	// Applications usually only need a handful of samplers.  So just define them all up front
 	// and keep them available as part of the root signature.  

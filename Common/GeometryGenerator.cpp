@@ -291,8 +291,8 @@ GeometryGenerator::Vertex GeometryGenerator::MidPoint(const Vertex& v0, const Ve
     // Compute the midpoints of all the attributes.  Vectors need to be normalized
     // since linear interpolating can make them not unit length.  
     XMVECTOR pos = 0.5f*(p0 + p1);
-    XMVECTOR normal = XMVector3Normalize(0.5f*(n0 + n1));
-    XMVECTOR tangent = XMVector3Normalize(0.5f*(tan0+tan1));
+    XMVECTOR normal = XMVector3Normalize(n0 + n1);
+    XMVECTOR tangent = XMVector3Normalize(tan0 + tan1);
     XMVECTOR tex = 0.5f*(tex0 + tex1);
 
     Vertex v;

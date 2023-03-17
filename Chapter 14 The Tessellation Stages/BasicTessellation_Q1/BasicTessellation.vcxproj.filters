@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="BezierPatchApp.cpp">
+    <ClCompile Include="BasicTessellationApp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FrameResource.cpp">
@@ -70,14 +70,8 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Shaders\BezierTessellation.hlsl">
-      <Filter>Resource Files</Filter>
-    </FxCompile>
-    <FxCompile Include="Shaders\Default.hlsl">
-      <Filter>Resource Files</Filter>
-    </FxCompile>
-    <FxCompile Include="Shaders\LightingUtil.hlsl">
-      <Filter>Resource Files</Filter>
-    </FxCompile>
+    <FxCompile Include="Shaders\Default.hlsl" />
+    <FxCompile Include="Shaders\LightingUtil.hlsl" />
+    <FxCompile Include="Shaders\Tessellation.hlsl" />
   </ItemGroup>
 </Project>
