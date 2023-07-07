@@ -359,6 +359,7 @@ void CrateApp::UpdateCamera(const GameTimer& gt)
 
 void CrateApp::AnimateMaterials(const GameTimer& gt)
 {
+  return;
   auto mat = mMaterials["woodCrate"].get();
   XMMATRIX matTrans = XMLoadFloat4x4(&mat->MatTransform);
   matTrans  *= XMMatrixRotationZ(gt.DeltaTime() * 0.4f);
@@ -456,7 +457,7 @@ void CrateApp::LoadTextures()
   auto woodCrateTex = std::make_unique<Texture>();
   woodCrateTex->Name = "woodCrateTex";
   //woodCrateTex->Filename = L"../../Textures/WoodCrate01.dds";
-  woodCrateTex->Filename = L"../../Textures/WoodCrate01.dds";
+  woodCrateTex->Filename = L"CustomedMipMap.dds";
   ThrowIfFailed(DirectX::CreateDDSTextureFromFile12(md3dDevice.Get(),
   mCommandList.Get(), woodCrateTex->Filename.c_str(),
   woodCrateTex->Resource, woodCrateTex->UploadHeap));
@@ -679,7 +680,7 @@ void CrateApp::BuildRenderItems()
 
   //修改物体的贴图变换矩阵
   XMFLOAT4X4 texTrans{};
-  XMStoreFloat4x4(&texTrans, XMMatrixScaling(3, 3, 3));
+  XMStoreFloat4x4(&texTrans, XMMatrixScaling(2, 2, 2));
   boxRitem->TexTransform = texTrans;
 
   mAllRitems.push_back(std::move(boxRitem));
@@ -724,7 +725,6 @@ std::array<const CD3DX12_STATIC_SAMPLER_DESC, 6> CrateApp::GetStaticSamplers()
 {
   // Applications usually only need a handful of samplers.  So just define them all up front
   // and keep them available as part of the root signature.  
-
   const CD3DX12_STATIC_SAMPLER_DESC pointWrap(
     0, // shaderRegister
     D3D12_FILTER_MIN_MAG_MIP_POINT, // filter
@@ -734,7 +734,7 @@ std::array<const CD3DX12_STATIC_SAMPLER_DESC, 6> CrateApp::GetStaticSamplers()
 
   const CD3DX12_STATIC_SAMPLER_DESC pointAny(
     1, // shaderRegister
-    D3D12_FILTER_MIN_MAG_LINEAR_MIP_POINT, // filter
+    D3D12_FILTER_ANISOTROPIC, // filter
     D3D12_TEXTURE_ADDRESS_MODE_WRAP,  // addressU
     D3D12_TEXTURE_ADDRESS_MODE_WRAP,  // addressV
     D3D12_TEXTURE_ADDRESS_MODE_WRAP); // addressW

@@ -168,7 +168,7 @@ void D3DApp::OnResize()
   {
     ThrowIfFailed(mSwapChain->GetBuffer(i, IID_PPV_ARGS(&mSwapChainBuffer[i])));
    
-    if (USE_R8G8B8A8_UNORM_RGB && mBackBufferFormat == DXGI_FORMAT_R8G8B8A8_UNORM)
+    if (USE_R8G8B8A8_UNORM_SRGB && mBackBufferFormat == DXGI_FORMAT_R8G8B8A8_UNORM)
     {
       // Use srgb rtv.
       D3D12_RENDER_TARGET_VIEW_DESC RTV_Desc{ DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, D3D12_RTV_DIMENSION_TEXTURE2D };
@@ -523,7 +523,7 @@ void D3DApp::CreateSwapChain()
   sd.BufferDesc.Height = mClientHeight;
   sd.BufferDesc.RefreshRate.Numerator = 60;
   sd.BufferDesc.RefreshRate.Denominator = 1;
-  sd.BufferDesc.Format = mBackBufferFormat;
+  sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
   sd.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
   sd.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
   sd.SampleDesc.Count = m4xMsaaState ? 4 : 1;

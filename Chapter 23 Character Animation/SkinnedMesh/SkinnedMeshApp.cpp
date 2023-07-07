@@ -1788,7 +1788,7 @@ void SkinnedMeshApp::DrawRenderItems(ID3D12GraphicsCommandList* cmdList, const s
         }
         else
         {
-            cmdList->SetGraphicsRootConstantBufferView(1, 0);
+            //cmdList->SetGraphicsRootConstantBufferView(1, 0);
         }
 
         cmdList->DrawIndexedInstanced(ri->IndexCount, 1, ri->StartIndexLocation, ri->BaseVertexLocation, 0);

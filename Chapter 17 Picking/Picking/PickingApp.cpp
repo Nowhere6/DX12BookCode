@@ -949,13 +949,12 @@ void PickingApp::Pick(int sx, int sy)
 						mPickedRitem->Visible = true;
 						mPickedRitem->IndexCount = 3;
 						mPickedRitem->BaseVertexLocation = 0;
+						// Offset to the picked triangle in the mesh index buffer.
+						mPickedRitem->StartIndexLocation = 3 * pickedTriangle;
 
 						// Picked render item needs same world matrix as object picked.
 						mPickedRitem->World = ri->World;
 						mPickedRitem->NumFramesDirty = gNumFrameResources;
-
-						// Offset to the picked triangle in the mesh index buffer.
-						mPickedRitem->StartIndexLocation = 3 * pickedTriangle;
 					}
 				}
 			}
